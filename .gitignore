@@ -1,0 +1,5 @@
+wp*
+*.php
+.htaccess
+license.txt
+readme.html

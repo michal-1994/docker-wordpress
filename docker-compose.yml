@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  mysql_name:
+    image: mysql:5.7
+    container_name: mysql_name
+    restart: always
+    volumes:
+      - volume:/var/lib/mysql
+    environment:
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user_password
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: db_name
+    networks:
+      - network
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: mysql_name
+    depends_on:
+      - mysql_name
+    ports:
+      - '8080:80'
+    networks:
+      - network
+  wordpress:
+    image: wordpress:latest
+    container_name: wordpress
+    restart: always
+    volumes: ['./wordpress:/var/www/html']
+    environment:
+      WORDPRESS_DB_HOST: mysql_name:3306
+    depends_on:
+      - mysql_name
+    ports:
+      - '8000:80'
+    networks:
+      - network
+
+networks:
+  network:
+volumes:
+  volume:
